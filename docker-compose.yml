@@ -25,54 +25,6 @@ services:
       - traefik.http.services.saltcorn-app.loadbalancer.server.port=3000
       - traefik.enable=true
 
-  shipvietbrite-app:
-    image: saltcorn/saltcorn
-    container_name: shipvietbrite
-    depends_on:
-      - saltcorn-db
-    command: "serve"
-    restart: always
-    networks:
-      - saltcorn
-    ports: #not needed if using traefik
-      - "${PORT_SHIPVIETBRITE}:3000"
-    environment:
-      - SALTCORN_SESSION_SECRET=${SALTCORN_SECRET_SHIPVIETBRITE}
-      - PGHOST=saltcorn-db
-      - PGUSER=${PGUSER}
-      - PGDATABASE=${PGDATABASE_SHIPVIETBRITE}
-      - PGPASSWORD=${PGPASSWORD}
-    labels: # If using traefik to reverse proxy into saltcorn
-      - traefik.http.routers.saltcorn-app.rule=Host(`saltcorn.${DOMAIN}`)
-      - traefik.http.routers.saltcorn-app.entrypoints=secure
-      - traefik.http.routers.saltcorn-app.tls.certresolver=leresolver
-      - traefik.http.services.saltcorn-app.loadbalancer.server.port=3000
-      - traefik.enable=true
-    
-  payvietbrite-app:
-    image: saltcorn/saltcorn
-    container_name: payvietbrite
-    depends_on:
-      - saltcorn-db
-    command: "serve"
-    restart: always
-    networks:
-      - saltcorn
-    ports: #not needed if using traefik
-      - "${PORT_PAYVIETBRITE}:3000"
-    environment:
-      - SALTCORN_SESSION_SECRET=${SALTCORN_SECRET_PAYVIETBRITE}
-      - PGHOST=saltcorn-db
-      - PGUSER=${PGUSER}
-      - PGDATABASE=${PGDATABASE_PAYVIETBRITE}
-      - PGPASSWORD=${PGPASSWORD}
-    labels: # If using traefik to reverse proxy into saltcorn
-      - traefik.http.routers.saltcorn-app.rule=Host(`saltcorn.${DOMAIN}`)
-      - traefik.http.routers.saltcorn-app.entrypoints=secure
-      - traefik.http.routers.saltcorn-app.tls.certresolver=leresolver
-      - traefik.http.services.saltcorn-app.loadbalancer.server.port=3000
-      - traefik.enable=true
-  
   infovietquick-app:
     image: saltcorn/saltcorn
     container_name: infovietquick-app
@@ -108,7 +60,7 @@ services:
     environment:
       - POSTGRES_USER=${PGUSER} # initdb.sql script will only work for user "postgres"
       - POSTGRES_PASSWORD=${PGPASSWORD}
-      - POSTGRES_MULTIPLE_DATABASES=${PGDATABASE_THUYLAMUK}, ${PGDATABASE_PAYVIETBRITE}, ${PGDATABASE_SHIPVIETBRITE}, ${PGDATABASE_INFOVIETQUICK}
+      - POSTGRES_MULTIPLE_DATABASES=${PGDATABASE_THUYLAMUK}, ${PGDATABASE_INFOVIETQUICK}
 
 networks:
   saltcorn:
